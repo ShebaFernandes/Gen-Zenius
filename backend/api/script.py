@@ -1,20 +1,19 @@
-from huggingface_hub import InferenceClient
-from dotenv import load_dotenv
+from transformers import pipeline, set_seed
 import pyttsx3
 import os
 from uuid import uuid4
 
-load_dotenv()  # Load from .env file
+# Set up GPT-2 locally
+generator = pipeline("text-generation", model="gpt2")
+set_seed(42)
 
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-client = InferenceClient("mistralai/Mistral-7B-Instruct-v0.2", token=HF_TOKEN)
-
+# ✅ Script generation using local GPT-2
 def generate_script(topic: str) -> str:
-    prompt = f"Explain the topic '{topic}' in a simple and engaging way suitable for students."
-    response = client.text_generation(prompt, max_new_tokens=300)
-    return response
+    prompt = f"Explain the topic '{topic}' in a short educational script."
+    result = generator(prompt, max_length=200, num_return_sequences=1)
+    return result[0]["generated_text"]
 
+# 🎙️ Generate audio from text
 def generate_audio(text: str) -> str:
     engine = pyttsx3.init()
     filename = f"{uuid4()}.mp3"
