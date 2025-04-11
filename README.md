@@ -1,0 +1,1 @@
+I used Google Colab to run the heavy AI model (because it has a free GPU), and  built a FastAPI backend in VS Code to handle the text input. Since my backend was running in Colab, I used ngrok to create a secure, public link so I could connect everything and test it.
